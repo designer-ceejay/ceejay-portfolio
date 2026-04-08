@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Designer Cedric</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #18181f;
+    --border: rgba(255,255,255,0.07);
+    --accent: #7f77dd;
+    --accent2: #5dcaa5;
+    --text: #f0eefc;
+    --muted: #888790;
+    --tag-bg: rgba(127,119,221,0.12);
+    --tag-border: rgba(127,119,221,0.3);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(127,119,221,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(127,119,221,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    font-family: 'Space Mono', monospace;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 3rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .hero-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-label::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--accent2);
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 .line2 {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255,255,255,0.25);
+  }
+
+  .hero h1 .accent-word { color: var(--accent); }
+
+  .hero-desc {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 2.5rem;
+    line-height: 1.75;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 1.75rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .btn-primary:hover { background: #9490e8; transform: translateY(-1px); }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 1.75rem;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .btn-outline:hover { border-color: rgba(255,255,255,0.3); transform: translateY(-1px); }
+
+  .hero-scroll {
+    margin-top: 5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--muted);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { width: 40px; opacity: 0.4; }
+    50% { width: 60px; opacity: 1; }
+  }
+
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .section-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+  }
+
+  .section-title {
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text p {
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .about-text p strong { color: var(--text); font-weight: 700; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .stat-box {
+    background: var(--surface);
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.75rem 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: default;
+  }
+
+  .skill-card:hover {
+    border-color: rgba(127,119,221,0.35);
+    transform: translateY(-3px);
+  }
+
+  .skill-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.1rem;
+    font-size: 16px;
+  }
+
+  .skill-name {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .skill-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 1rem;
+  }
+
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .service-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .service-card:hover { border-color: rgba(93,202,165,0.3); }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent2), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .service-card:hover::before { opacity: 1; }
+
+  .service-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .service-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  .service-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+
+  .project-card:hover {
+    border-color: rgba(127,119,221,0.35);
+    transform: translateY(-4px);
+  }
+
+  .project-thumb {
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .thumb-1 { background: linear-gradient(135deg, #1a1230 0%, #2d1f52 100%); }
+  .thumb-2 { background: linear-gradient(135deg, #0d2418 0%, #1a4030 100%); }
+  .thumb-3 { background: linear-gradient(135deg, #201020 0%, #3d1535 100%); }
+  .thumb-4 { background: linear-gradient(135deg, #121828 0%, #1c2e4a 100%); }
+
+  .thumb-pattern {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+
+  .thumb-label {
+    position: relative;
+    z-index: 1;
+    font-size: 2rem;
+    font-weight: 800;
+    opacity: 0.15;
+    letter-spacing: -0.04em;
+  }
+
+  .project-info { padding: 1.5rem; }
+
+  .project-meta {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent2);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .project-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .contact-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 3.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .contact-left h3 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+
+  .contact-left p {
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .contact-link:hover { color: var(--accent); }
+
+  .contact-link-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--tag-bg);
+    border: 1px solid var(--tag-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .form-group label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.65rem 0.85rem;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: rgba(127,119,221,0.5); }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(136,135,144,0.5); }
+
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 2rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .footer-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .footer-text span { color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-label { animation: fadeUp 0.6s ease both; }
+  .hero h1 { animation: fadeUp 0.6s 0.1s ease both; }
+  .hero-desc { animation: fadeUp 0.6s 0.2s ease both; }
+  .hero-cta { animation: fadeUp 0.6s 0.3s ease both; }
+  .hero-scroll { animation: fadeUp 0.6s 0.4s ease both; }
+
+  .cursor-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s;
+    display: none;
+  }
+
+  @media (pointer: fine) { .cursor-dot { display: block; } }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.25rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    section { padding: 4rem 1.5rem; }
+    .about-grid,
+    .contact-wrap { grid-template-columns: 1fr; gap: 2rem; }
+    .contact-wrap { padding: 2rem; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    .services-grid,
+    .projects-grid { grid-template-columns: 1fr; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursor"></div>
+
+<nav>
+  <span class="nav-logo">_ceejay_</span>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <span class="hero-label">Available for work &nbsp;·&nbsp; Web &amp; UI/UX</span>
+  <h1>
+    <div>Designer.</div>
+    <div class="line2">Developer.</div>
+    <div><span class="accent-word">CEDRIC.</span></div>
+  </h1>
+  <p class="hero-desc">
+    Crafting digital experiences that sit at the intersection of <strong>bold design</strong> and <strong>clean code</strong>. Web design, development &amp; UI/UX from concept to deployment.
+  </p>
+  <div class="hero-cta">
+    <a href="#work" class="btn-primary">View My Work →</a>
+    <a href="#contact" class="btn-outline">Get In Touch</a>
+  </div>
+  <div class="hero-scroll">
+    <span class="scroll-line"></span>
+    Scroll to explore
+  </div>
+</div>
+
+<section id="about">
+  <div class="section-header">
+    <span class="section-num">01 /</span>
+    <h2 class="section-title">About Me</h2>
+    <span class="section-line"></span>
+  </div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>Hey — I'm <strong>Cedric</strong>, an aspiring Web Designer, Developer &amp; UI/UX Designer with a passion for building things that look great and work even better.</p>
+      <p>I believe the best digital products are born when <strong>design thinking meets engineering precision</strong>. Every pixel is a decision, and every interaction is a story.</p>
+      <p>Currently sharpening my skills across the full stack of the web — from wireframes and prototypes to responsive frontends and live deployments.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-box">
+        <span class="stat-num">3+</span>
+        <span class="stat-label">Disciplines</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">∞</span>
+        <span class="stat-label">Ideas</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Committed</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">Now</span>
+        <span class="stat-label">Available</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-header">
+    <span class="section-num">02 /</span>
+    <h2 class="section-title">Skills</h2>
+    <span class="section-line"></span>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <div class="skill-icon">✦</div>
+      <div class="skill-name">Web Design</div>
+      <div class="skill-desc">Creating visually compelling, responsive websites with strong layout principles and aesthetic direction.</div>
+      <div class="skill-tags">
+        <span class="tag">Figma</span>
+        <span class="tag">Typography</span>
+        <span class="tag">Layout</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">&lt;/&gt;</div>
+      <div class="skill-name">Web Development</div>
+      <div class="skill-desc">Building clean, performant frontends and functional web apps from scratch using modern tools.</div>
+      <div class="skill-tags">
+        <span class="tag">HTML/CSS</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">React</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">◈</div>
+      <div class="skill-name">UI/UX Design</div>
+      <div class="skill-desc">Designing user-centered interfaces with clear flows, intuitive interactions, and thoughtful prototypes.</div>
+      <div class="skill-tags">
+        <span class="tag">Wireframes</span>
+        <span class="tag">Prototyping</span>
+        <span class="tag">User Flows</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">▲</div>
+      <div class="skill-name">Visual Identity</div>
+      <div class="skill-desc">Crafting cohesive brand visuals — color systems, type pairings, and design language that resonates.</div>
+      <div class="skill-tags">
+        <span class="tag">Branding</span>
+        <span class="tag">Color Theory</span>
+        <span class="tag">Icons</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">⬡</div>
+      <div class="skill-name">Motion &amp; Interaction</div>
+      <div class="skill-desc">Adding life to interfaces with purposeful animations and micro-interactions that delight users.</div>
+      <div class="skill-tags">
+        <span class="tag">CSS Animations</span>
+        <span class="tag">GSAP</span>
+        <span class="tag">Framer</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">◎</div>
+      <div class="skill-name">Design Systems</div>
+      <div class="skill-desc">Building scalable component libraries and consistent design tokens for cohesive products.</div>
+      <div class="skill-tags">
+        <span class="tag">Components</span>
+        <span class="tag">Tokens</span>
+        <span class="tag">Storybook</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-header">
+    <span class="section-num">03 /</span>
+    <h2 class="section-title">Services</h2>
+    <span class="section-line"></span>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-num">SRV — 01</div>
+      <div class="service-title">Website Design &amp; Build</div>
+      <div class="service-desc">End-to-end website creation — from initial concept and wireframes through to a fully coded, responsive, and deployed site tailored to your brand.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">SRV — 02</div>
+      <div class="service-title">UI/UX Design</div>
+      <div class="service-desc">User research, wireframing, prototyping, and high-fidelity UI design for web apps, dashboards, and digital products that put users first.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">SRV — 03</div>
+      <div class="service-title">Landing Pages</div>
+      <div class="service-desc">High-converting, visually bold landing pages designed to capture attention, communicate value, and drive action — fast turnaround.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-num">SRV — 04</div>
+      <div class="service-title">Brand Identity</div>
+      <div class="service-desc">Visual identity systems including logo concepts, color palettes, typography, and brand guidelines to give your project a distinctive presence.</div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="section-header">
+    <span class="section-num">04 /</span>
+    <h2 class="section-title">Portfolio</h2>
+    <span class="section-line"></span>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-thumb thumb-1">
+        <div class="thumb-pattern"></div>
+        <div class="thumb-label">01</div>
+      </div>
+      <div class="project-info">
+        <div class="project-meta">Web Design · UI/UX</div>
+        <div class="project-title">Project Title Here</div>
+        <div class="project-desc">A brief description of this project — what you built, the problem it solved, and the tools used.</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb thumb-2">
+        <div class="thumb-pattern"></div>
+        <div class="thumb-label">02</div>
+      </div>
+      <div class="project-info">
+        <div class="project-meta">Development · Frontend</div>
+        <div class="project-title">Project Title Here</div>
+        <div class="project-desc">A brief description of this project — what you built, the problem it solved, and the tools used.</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb thumb-3">
+        <div class="thumb-pattern"></div>
+        <div class="thumb-label">03</div>
+      </div>
+      <div class="project-info">
+        <div class="project-meta">Branding · Visual Identity</div>
+        <div class="project-title">Project Title Here</div>
+        <div class="project-desc">A brief description of this project — what you built, the problem it solved, and the tools used.</div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-thumb thumb-4">
+        <div class="thumb-pattern"></div>
+        <div class="thumb-label">04</div>
+      </div>
+      <div class="project-info">
+        <div class="project-meta">UI Design · Motion</div>
+        <div class="project-title">Project Title Here</div>
+        <div class="project-desc">A brief description of this project — what you built, the problem it solved, and the tools used.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-header">
+    <span class="section-num">05 /</span>
+    <h2 class="section-title">Contact</h2>
+    <span class="section-line"></span>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-left">
+      <h3>Let's build something great.</h3>
+      <p>Got a project in mind? Need a designer who can also code? Let's talk — I'm open to freelance work, collaborations, and opportunities.</p>
+      <div class="contact-links">
+        <a href="mailto:cedric@email.com" class="contact-link">
+          <span class="contact-link-icon">@</span>
+          cedricjakana@gmail.com
+        </a>
+        <a href="#" class="contact-link">
+          <span class="contact-link-icon">gh</span>
+          github.com/designercedric
+        </a>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea rows="4" placeholder="Tell me about your project..."></textarea>
+      </div>
+      <button class="btn-primary" style="align-self: flex-start;">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-text">© 2026 <span>Designer Cedric</span> — Crafted with code &amp; intent.</span>
+  <span class="footer-text" style="font-size:10px;">_cedric.design</span>
+</footer>
+
+<script>
+  const cursor = document.getElementById('cursor');
+  if (cursor) {
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = (e.clientX - 3) + 'px';
+      cursor.style.top = (e.clientY - 3) + 'px';
+    });
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
