@@ -549,7 +549,58 @@
     flex-direction: column;
     gap: 1rem;
   }
+.contact-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
+.contact-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.card-left h4 {
+  font-size: 1.1rem;
+  margin-bottom: 3px;
+}
+
+.card-left p {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.status.online {
+  color: #00ff88;
+}
+
+.card-action {
+  font-size: 0.9rem;
+  color: var(--text);
+}
   .form-group {
     display: flex;
     flex-direction: column;
@@ -848,20 +899,44 @@
     <div class="contact-left">
       <h3>Let's build something great.</h3>
       <p>Got a project in mind? Need a designer who can also code? Let's talk — I'm open to freelance work, collaborations, and opportunities.</p>
-      <div class="contact-links">
-       <a href="mailto:cedricjakana@gmail.com" class="contact-link">
-          <span class="contact-link-icon">@</span>
-          cedricjakana@gmail.com
-        </a>
-       <a href="tel:+256740873296" class="contact-link">
-  <span class="contact-link-icon">📞</span>
-  +256 740 873296
-       </a>
-       <a href="https://wa.me/256740873296" target="_blank" class="contact-link">
-  <span class="contact-link-icon">💬</span>
-  WhatsApp Me
-       </a>
+      <div class="contact-cards">
+
+  <!-- WhatsApp -->
+  <a href="https://wa.me/256740873296" target="_blank" class="contact-card">
+    <div class="card-left">
+      <span class="icon">💬</span>
+      <div>
+        <h4>WhatsApp</h4>
+        <p class="status online">● Online</p>
       </div>
+    </div>
+    <span class="card-action">Start the chat →</span>
+  </a>
+
+  <!-- Email -->
+  <a href="mailto:cedricjakana@gmail.com" class="contact-card">
+    <div class="card-left">
+      <span class="icon">✉️</span>
+      <div>
+        <h4>E-mail</h4>
+        <p>Available 24/7</p>
+      </div>
+    </div>
+    <span class="card-action">cedricjakana@gmail.com</span>
+  </a>
+
+  <!-- Phone -->
+  <a href="tel:+256740873296" class="contact-card">
+    <div class="card-left">
+      <span class="icon">📞</span>
+      <div>
+        <h4>Phone</h4>
+        <p>Available anytime</p>
+      </div>
+    </div>
+    <span class="card-action">+256 740 873296</span>
+  </a>
+</div>
   </div>
 </section>
 
